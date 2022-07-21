@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.ploigos</groupId>
+    <artifactId>data-analysis-parent</artifactId>
+    <version>0.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>data-analysis</artifactId>
+  <packaging>jar</packaging>
+  <name>Camel DataAnalysis Component</name>
+  <description>Camel Component for DataAnalysis</description>
+
+  <properties>
+    <schemeName>data-analysis</schemeName>
+    <componentName>DataAnalysis</componentName>
+    <componentPackage>org.ploigos</componentPackage>
+    <outPackage>org.ploigos.internal</outPackage>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-support</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ploigos</groupId>
+      <artifactId>data-analysis-api</artifactId>
+      <version>0.0.0-SNAPSHOT</version>
+    </dependency>
+
+    <!-- Component API javadoc in provided scope to read API signatures -->
+    <dependency>
+      <groupId>org.ploigos</groupId>
+      <artifactId>data-analysis-api</artifactId>
+      <version>0.0.0-SNAPSHOT</version>
+      <classifier>javadoc</classifier>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- logging -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>2.17.2</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- testing -->
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-test-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
+
+      <!-- generate Component source and test source -->
+      <plugin>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-api-component-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-test-component-classes</id>
+            <goals>
+              <goal>fromApis</goal>
+            </goals>
+            <configuration>
+              <apis>
+                <api>
+                  <apiName>hello</apiName>
+                  <proxyClass>org.ploigos.api.DataAnalysisHello</proxyClass>
+                  <fromJavasource />
+                </api>
+              </apis>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.ploigos</groupId>
+            <artifactId>data-analysis-api</artifactId>
+            <version>0.0.0-SNAPSHOT</version>
+            <classifier>sources</classifier>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <!-- generate camel meta-data -->
+      <plugin>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-component-maven-plugin</artifactId>
+      </plugin>
+
+      <!-- add generated source and test source to build -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+      </plugin>
+
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.camel</groupId>
+          <artifactId>camel-api-component-maven-plugin</artifactId>
+          <version>${camelVersion}</version>
+          <configuration>
+            <scheme>${schemeName}</scheme>
+            <componentName>${componentName}</componentName>
+            <componentPackage>${componentPackage}</componentPackage>
+            <outPackage>${outPackage}</outPackage>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M5</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-api-component-maven-plugin</artifactId>
+        <version>${camelVersion}</version>
+        <configuration>
+          <scheme>${schemeName}</scheme>
+          <componentName>${componentName}</componentName>
+          <componentPackage>${componentPackage}</componentPackage>
+          <outPackage>${outPackage}</outPackage>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+
+</project>
