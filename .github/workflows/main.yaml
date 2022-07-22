@@ -24,6 +24,7 @@ jobs:
 
   containerize:
     strategy:
+      max-parallel: 0
       matrix:
         module: [data-analysis, data-clean]
     runs-on: [ ubuntu-latest ]
