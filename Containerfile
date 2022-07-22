@@ -4,7 +4,7 @@ WORKDIR /workspace/app
 ARG MODULE
 ARG MODULE_COMPONENT="${MODULE}-component"
 ARG DEPENDENCY=/workspace/app/${MODULE}/${MODULE_COMPONENT}/target/dependency
-
+RUN echo deps ${DEPENDENCY}
 COPY . .
 COPY ${MODULE} ${MODULE}
 
