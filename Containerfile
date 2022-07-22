@@ -4,12 +4,12 @@ WORKDIR /workspace/app
 ARG MODULE
 ARG MODULE_COMPONENT="${MODULE}-component"
 ARG DEPENDENCY=/workspace/app/${MODULE}/${MODULE_COMPONENT}/target/dependency
-RUN echo deps ${DEPENDENCY}
+
 COPY . .
 COPY ${MODULE} ${MODULE}
 
 RUN chmod +x ./mvnw && ./mvnw clean test package -am -pl ${MODULE}
-RUN mkdir -p ${DEPENDENCY} && (cd ${DEPENDENCY}; jar -xf ../*.jar)
+RUN mkdir -p ${DEPENDENCY} && ls /workspace/app/${MODULE}/${MODULE_COMPONENT}/target/ && (cd ${DEPENDENCY}; jar -xf ../*.jar)
 
 RUN ls ${DEPENDENCY}
 
