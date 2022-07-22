@@ -8,8 +8,11 @@ ARG DEPENDENCY=/workspace/app/${MODULE}/${MODULE_COMPONENT}/target/dependency
 COPY . .
 COPY ${MODULE} ${MODULE}
 
-RUN chmod +x ./mvnw && ./mvnw clean test package -am -pl ${MODULE}
-RUN mkdir -p ${DEPENDENCY} && ls /workspace/app/${MODULE}/${MODULE_COMPONENT}/target/ && (cd ${DEPENDENCY}; jar -xf ../*.jar)
+RUN chmod +x ./mvnw && \
+    ./mvnw clean test package -am -pl ${MODULE} && \
+    mkdir -p ${DEPENDENCY} && \
+    ls /workspace/app/${MODULE}/${MODULE_COMPONENT}/target/ && \
+    (cd ${DEPENDENCY}; jar -xf ../*.jar)
 
 RUN ls ${DEPENDENCY}
 
