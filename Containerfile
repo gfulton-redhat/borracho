@@ -8,11 +8,9 @@ ARG DEPENDENCY=/workspace/app/${MODULE}/${MODULE_COMPONENT}/target/dependency
 COPY . .
 COPY ${MODULE} ${MODULE}
 
-RUN chmod +x ./mvnw && \
-    ./mvnw clean test package -am -pl ${MODULE}
+RUN chmod +x ./mvnw && ./mvnw clean test package -am -pl ${MODULE}
 
-RUN mkdir -p ${DEPENDENCY} && \
-    (cd ${DEPENDENCY}; jar -xf ../*.jar)
+RUN mkdir -p ${DEPENDENCY} && (cd ${DEPENDENCY}; jar -xf ../*.jar)
 
 FROM openjdk:18-jdk-alpine
 VOLUME /tmp
