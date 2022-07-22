@@ -9,12 +9,10 @@ COPY . .
 COPY ${MODULE} ${MODULE}
 
 RUN chmod +x ./mvnw && \
-    ./mvnw clean test package -am -pl ${MODULE} && \
-    mkdir -p ${DEPENDENCY} && \
-    ls /workspace/app/${MODULE}/${MODULE_COMPONENT}/target/ && \
-    (cd ${DEPENDENCY}; jar -xf ../*.jar)
+    ./mvnw clean test package -am -pl ${MODULE}
 
-RUN ls ${DEPENDENCY}
+RUN mkdir -p ${DEPENDENCY} && \
+    (cd ${DEPENDENCY}; jar -xf ../*.jar)
 
 FROM openjdk:18-jdk-alpine
 VOLUME /tmp
