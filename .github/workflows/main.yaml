@@ -32,9 +32,7 @@ jobs:
           name: working-dir
           path: ${{ github.workspace }}
       - name: podman-build
-        run: podman build -t data-analysis:${{ github.sha }} -f Containerfile --build-arg MODULE=data-analysis .
-#      - name: podman-tag
-#        run: podman tag data-analysis ${{ secrets.REPO_HOSTNAME }}/${{ secrets.REPO_USERNAME }}/${{ matrix.module }}:${{ github.sha }}
+        run: podman build -t data-analysis:${{ github.sha }} --build-arg MODULE="data-storage" -f Containerfile
       - name: upload-artifacts
         uses: actions/upload-artifact@v1
         with:
