@@ -5,7 +5,18 @@ WORKDIR /workspace/app
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
-COPY src src
+COPY data-clean .
+COPY data-analysis .
+COPY data-collect .
+COPY data-evaluate .
+COPY data-extract .
+COPY data-metadata .
+COPY data-prepare .
+COPY data-query .
+COPY data-split .
+COPY data-storage .
+COPY data-transform .
+COPY data-validate .
 
 RUN chmod +x ./mvnw && ./mvnw clean test package
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
