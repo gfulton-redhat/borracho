@@ -1,5 +1,5 @@
 ---
-name: file-to-file
+name: borracho
 on:
   push:
   pull_request_target:
@@ -11,6 +11,36 @@ on:
 permissions:
   pull-requests: write
 jobs:
-  build:
-    uses: gfulton-redhat/github-workflows/.github/workflows/maven.yaml@main
-    secrets: inherit
+  setup:
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: checkout-source
+        uses: actions/checkout@v3
+      - name: upload-artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: working-dir
+          path: ${{ github.workspace }}
+
+  containerize:
+    strategy:
+      max-parallel: 2
+      matrix:
+        modules: [data-analysis, data-clean]
+    runs-on: [ ubuntu-latest ]
+    needs: setup
+    steps:
+      - name: download-artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: working-dir
+          path: ${{ github.workspace }}
+      - name: podman-build
+        run: podman build -t ${{ github.event.repository.name }}:${{ github.sha }} -f Containerfile --build-arg MODULE=${{ matrix.module }}
+      - name: podman-tag
+        run: podman tag ${{ matrix.module }} ${{ secrets.REPO_HOSTNAME }}/${{ secrets.REPO_USERNAME }}/${{ matrix.module }}:${{ github.sha }}
+#      - name: upload-artifacts
+#        uses: actions/upload-artifact@v1
+#        with:
+#          name: working-dir
+#          path: ${{ github.workspace }}
